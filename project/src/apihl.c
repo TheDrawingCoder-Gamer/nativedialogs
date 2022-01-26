@@ -291,9 +291,8 @@ DEFINE_PRIM(_I32, hl_win_create_process, _STRING _STRING _STRING _BOOL _BOOL);
 // Tray Icon specific code
 
 
-static value systray_create_icon( value w, value iconpath, value tooltip )
+static value HL_NAME(hl_systray_create_icon)( value w, vstring* iconpath, vstring* tooltip )
 {
-	val_check(tooltip,string);
 	if ( !(val_is_string(iconpath) || val_is_null(iconpath)) )
 		val_throw(alloc_string(tray_icon_error));
 	else {
