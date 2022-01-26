@@ -58,8 +58,8 @@ char* systools_dialogs_save_file( const char *title, const char* msg, const char
 	dialog = gtk_file_chooser_dialog_new (title,
 					  NULL,
 					  GTK_FILE_CHOOSER_ACTION_SAVE,
-					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+					  "_CANCEL", GTK_RESPONSE_CANCEL,
+					  "_SAVE", GTK_RESPONSE_ACCEPT,
 					  NULL);
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
@@ -98,8 +98,8 @@ void systools_dialogs_open_file( const char *title, const char *msg, struct ARG_
 	dialog = gtk_file_chooser_dialog_new (title,
 					  NULL,
 					  GTK_FILE_CHOOSER_ACTION_OPEN,
-					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					  "_CANCEL", GTK_RESPONSE_CANCEL,
+					  "_OPEN", GTK_RESPONSE_ACCEPT,
 					  NULL);
 	gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER (dialog), TRUE );
 	gtk_file_chooser_set_filter( GTK_FILE_CHOOSER (dialog), filter );
@@ -127,8 +127,8 @@ char* systools_dialogs_folder( const char *title, const char *msg ) {
 	dialog = gtk_file_chooser_dialog_new (title,
 					  NULL,
 					  GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					  "_CANCEL", GTK_RESPONSE_CANCEL,
+					  "_OPEN", GTK_RESPONSE_ACCEPT,
 					  NULL);
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {

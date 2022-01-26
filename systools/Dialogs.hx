@@ -35,11 +35,17 @@ typedef FILEFILTERS = {
 }
 
 class Dialogs {
+	#if hl
+	static var initialized = false;
+	#end
 	#if !hl
 	static var _message_box = systools.Loader.load("systools","dialogs_message_box",3);
 	#end
 	public static function message( title : String, msg : String, isError : Bool ) {
 		#if hl
+		if (!initialized) {
+			HLSystools.hlInit();
+		}
 		HLSystools.hlDialogsMessageBox(title,msg, isError);
 		#else
 		_message_box(title, msg, isError);
@@ -50,6 +56,9 @@ class Dialogs {
 	#end
 	public static function confirm( title : String, msg : String, isError : Bool ) : Bool {
 		#if hl 
+		if (!initialized) {
+			HLSystools.hlInit();
+		}
 		return HLSystools.hlDialogsDialogBox(title, msg, isError);
 		#else
 		return _dialog_box(title, msg, isError);
@@ -72,6 +81,10 @@ class Dialogs {
 				_dialog_save_file = function(title,msg,initialDir,mask) return savef(title,msg,initialDir);
 			}
 		} 
+		#else 
+		if (!initialized) {
+			HLSystools.hlInit();
+		}
 		#end
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
 		var str:String = #if hl HLSystools.hlDialogsSaveFile(title, msg, initialDir, mask)#else _dialog_save_file(title, msg, initialDir,mask) #end;
@@ -94,10 +107,14 @@ class Dialogs {
 				_dialog_open_file = function(title,msg,mask,multi) return openf(title,msg,mask);
 			}
 		}
+		#else 
+		if (!initialized) {
+			HLSystools.hlInit();
+		}
 		#end
 
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var arr:Array<String> = #if hl HLSystools.hlDialogsOpenFile(title, msg, mask, multi) #else _dialog_open_file(title, msg, mask, multi) #end;
+		var arr:Array<String> = #if hl [for (s in HLSystools.hlDialogsOpenFile(title, msg, mask, multi)) (s:String)] #else _dialog_open_file(title, msg, mask, multi) #end;
 		Sys.setCwd(cwd);					//reset it afterwards
 		return arr;
 	}
@@ -106,6 +123,9 @@ class Dialogs {
 	#end
 	public static function folder( title : String, msg: String ) : String {
 		#if hl 
+		if (!initialized) {
+			HLSystools.hlInit();
+		}
 		return HLSystools.hlDialogsFolder(title, msg);
 		#else
 		return _dialog_folder(title,msg);

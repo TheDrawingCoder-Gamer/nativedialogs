@@ -20,8 +20,7 @@ HEADERS:=$(foreach PATH,$(SRC_PATHS), $(wildcard $(PATH)/*.h))
 HXCPP=$(shell haxelib path hxcpp | head -1)
 
 CC:=g++ -Isrc
-GTK_FLAGS:=$(shell pkg-config --libs --cflags gtk+-2.0)
-GCONF_FLAGS:=$(shell pkg-config --libs --cflags gconf-2.0)
+GTK_FLAGS:=$(shell pkg-config --libs --cflags gtk+-3.0)
 NEKO_FLAGS:=-fpic -fPIC -DHX_LINUX -DHXCPP_VISIT_ALLOCS -I$(HXCPP)/include -ldl -fvisibility=hidden -O2
 
 CPPFLAGS += $(GTK_FLAGS) $(GCONF_FLAGS) $(NEKO_FLAGS)
