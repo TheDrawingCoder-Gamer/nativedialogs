@@ -2,7 +2,8 @@ obj
 *.o
 *.n
 bin
-
+*.log
+*.hl
 # OSX objects
 all_objs
 .DS_Store

@@ -24,7 +24,9 @@
  */
 
 package systools;
-
+#if hl
+import systools.hl.HLSystools;
+#end
 class Browser {
 
 	/** Launches the default browser and opens it at the target URL.
@@ -37,9 +39,13 @@ class Browser {
 	    var sys:String=Sys.systemName();
 	    if ((sys!="Mac")&&(sys!="Windows"))
 			throw "systools.Browser.launch() only works on Mac or Windows";
-
+		#if hl
+		return HLSystools.hlBrowserLaunch(targetURL);
+		#else 
 		return _browser_launch(targetURL);
+		#end
 	}
-
+	#if !hl
 	static var _browser_launch = systools.Loader.load("systools","browser_launch",1);
+	#end
 }

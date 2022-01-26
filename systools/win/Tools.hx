@@ -25,6 +25,7 @@
 
 package systools.win;
 
+#if !hl
 class Tools {
 
 	/**
@@ -49,7 +50,7 @@ class Tools {
 
 		return if(_win_replace_exe_icon(exe, icon,iconResourceID)) true else false;
 	}
-	static var _win_replace_exe_icon;
+	static var _win_replace_exe_icon = null;
 
 
 	public static function createProcess( app: String, cmds: String, workingdir: String, hide: Bool, wait: Bool): Int {
@@ -70,5 +71,6 @@ class Tools {
 				, if (wait) 1 else 0
 				);
 	}
-	static var _win_create_process;
+	static var _win_create_process = null;
 }
+#end

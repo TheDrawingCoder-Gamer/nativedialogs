@@ -25,6 +25,7 @@
 
 package systools.win;
 
+#if !hl
 class Display {
 	/** Set the screen resolution (set temporarily - when the neko app quits the screen mode will be restored.)
 		@param width Width in pixels
@@ -68,3 +69,4 @@ class Display {
 	static var _display_set_default_mode = systools.Loader.load("systools","display_set_default_mode",0);
 	static var _display_is_mode_supported = systools.Loader.load("systools","display_is_mode_supported",3);
 }
+#end

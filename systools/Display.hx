@@ -25,6 +25,9 @@
 
 package systools;
 
+#if hl
+import systools.hl.HLSystools;
+#end
 class Display {
 	
 	/**
@@ -33,8 +36,13 @@ class Display {
 	**/
 	public static function getScreenSize()
 	{
+		#if hl 
+		return HLSystools.hlDisplayGetScreenSize();
+		#else
 		return _get_screen_size();
+		#end
 	}
-
+	#if !hl
 	static var _get_screen_size = systools.Loader.load("systools","display_get_screen_size",0);
+	#end
 }

@@ -24,7 +24,9 @@
  */
 package systools;
 import systools.Key;
-
+#if hl
+import systools.hl.HLSystools;
+#end
 class Misc {
 
 	private static function keymapMac(c) {
@@ -52,13 +54,15 @@ class Misc {
 
 	public static function getKeyState( key: Key ) : Bool {
 		var sysname = Sys.systemName();
-		return _misc_get_key_state(switch( sysname ) {
+		var goodKey:Int = switch( sysname ) {
 			case "Mac": keymapMac(key);
 			case "Windows": keymapWin(key);
 			default: throw "Not supported "+sysname;
-		}) != 0;
+		}
+		return #if hl HLSystoools.hlMiscGetKeyState(goodKey) #else _misc_get_key_state(goodKey) #end != 0 ;
 	}
+	#if !hl
 	static var _misc_get_key_state = systools.Loader.load("systools","misc_get_key_state",1);
-
+	#end
 }
 

@@ -24,10 +24,11 @@
  */
 package systools;
 
-import neko.FileSystem;
-import neko.io.File;
-import neko.io.FileInput;
-import neko.io.StringInput;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.FileInput;
+import haxe.io.StringInput;
+import haxe.io.Bytes;
 
 class SWFInfo
 {
@@ -47,19 +48,19 @@ class SWFInfo
 			throw "SWFInfo: Can't find SWF file '"+file+"'";
 			
 		var f:FileInput=File.read(file,true);
-		var magic:String=f.read(3);
+		var magic:String=f.read(3).toString();
 		if ((magic!="FWS")&&(magic!="CWS"))
 			throw "SWFInfo: Not a SWF file '"+file+"'";
 			
-		version=f.readChar();	// SWF Version
+		version=f.readByte();	// SWF Version
 		f.read(4);	// Skip file length
 		
 		// If it's a compressed file, we'll need to decompress
 		var buffer:String;
 		if (magic=="CWS")
-			buffer=neko.zip.Uncompress.run(f.readAll());	// Got to decompress the file *sigh*
+			buffer=haxe.zip.Uncompress.run(f.readAll()).toString();	// Got to decompress the file *sigh*
 		else
-			buffer=f.read(24); // Should be plenty
+			buffer=f.read(24).toString(); // Should be plenty
 		
 		// Can close the file now	
 		f.close();
@@ -78,8 +79,9 @@ class SWFInfo
 		var rectLength:Int=Std.int((5+b*4)/8)+1; // That's how many chars the rect was stored in
 		
 		// Start a new input stream (so we can use it's methods)
-		var input:StringInput=new StringInput(buffer,rectLength);
-		
+		var input:StringInput=new StringInput(buffer);
+		// ???
+		input.position = rectLength;
 		// Frame rate stored as fixed point 8.8 (little-endian)
 		var lsb:Int=input.readInt8();
 		var msb:Int=input.readInt8();

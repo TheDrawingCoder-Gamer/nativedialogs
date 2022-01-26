@@ -24,15 +24,22 @@
  */
 
 package systools;
-
+#if hl
+import systools.hl.HLSystools;
+#end
 class FileUtils {
 
 	/**
 	 * Get the value of the system's temporary path.
 	 */
 	static public function getTempFolder() : String {
+		#if hl
+		return HLSystools.hlFileutilsgetTempFolder();
+		#else
 		return _fileutils_get_temp_folder();
+		#end
 	}
-
+	#if !hl
 	static var _fileutils_get_temp_folder = systools.Loader.load("systools","fileutils_get_temp_folder", 0);
+	#end
 }

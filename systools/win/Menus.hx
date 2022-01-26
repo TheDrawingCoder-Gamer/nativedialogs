@@ -25,8 +25,10 @@
 
 package systools.win;
 
+#if !hl
 class Menus {
-	var m : Void;
+	// ??? why was this void
+	var m : Dynamic;
 
 	public function new( isPopup : Bool )
 	{
@@ -70,7 +72,7 @@ class Menus {
 	{
 		return m;
 	}
-
+	#if !hl
 	static var _win_menu_create = systools.Loader.load("systools", "win_menu_create", 0);
 	static var _win_popup_menu_create = systools.Loader.load("systools", "win_popup_menu_create", 0);
 	static var _win_destroy_menu = systools.Loader.load("systools","win_destroy_menu",1);
@@ -79,4 +81,6 @@ class Menus {
 	static var _win_add_menu_divider = systools.Loader.load("systools","win_add_menu_divider",2);
 	static var _win_show_menu = systools.Loader.load("systools","win_show_menu",2);
 	static var _win_show_popup_menu = systools.Loader.load("systools","win_show_popup_menu",2);
+	#end
 }
+#end

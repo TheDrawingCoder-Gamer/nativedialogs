@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "hl.h": "c"
+    },
+    "makefile.makefilePath": "project/HLMakefile"
+}

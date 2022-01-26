@@ -24,12 +24,12 @@
  */
 
 package systools.win;
-
+#if !hl
 import systools.win.Events;
 
 class Tray {
-
-	var t 		: Void;
+	// TODO: Figure out what this is referencing and make it more typesafe
+	var t 		: Dynamic;
 
 	static var _systray_create_icon = systools.Loader.load("systools","systray_create_icon",3);
 	static var _systray_menu_callback = systools.Loader.load("systools","systray_menu_callback",0);
@@ -44,3 +44,5 @@ class Tray {
 		return _systray_destroy_icon(t);
 	}
 }
+
+#end

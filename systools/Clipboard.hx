@@ -26,21 +26,36 @@
  */
 
 package systools;
-
+#if hl
+import systools.hl.HLSystools;
+#end
 class Clipboard {
 	static public function setText( text : String ) : Void {
+		#if hl
+		HLSystools.hlClipboardSetText(text);
+		#else
 		_set_clipboard_data(untyped text);
+		#end
 	}
 
 	static public function getText() : String {
+		#if hl 
+		return HLSystools.hlClipboardGetText();
+		#else
 		return _get_clipboard_data();
+		#end
 	}
 
 	static public function clear() : Void {
+		#if hl 
+		HLSystools.hlClipboardClear();
+		#else
 		_clear_clipboard();
+		#end
 	}
-
+	#if !hl
 	static var _set_clipboard_data = systools.Loader.load("systools","clipboard_set_text",1);
 	static var _get_clipboard_data = systools.Loader.load("systools","clipboard_get_text",0);
 	static var _clear_clipboard = systools.Loader.load("systools","clipboard_clear",0);
+	#end
 }

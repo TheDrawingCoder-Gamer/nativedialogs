@@ -2,10 +2,11 @@
 PROJECT:=systools
 
 LBITS := $(shell getconf LONG_BIT)
+# Build using VSCODE
 ifeq ($(LBITS),64)
-	NDLL:=../ndll/Linux64/$(PROJECT).hdll
+	NDLL:=./ndll/Linux64/$(PROJECT).hdll
 else
-	NDLL:=../ndll/Linux/$(PROJECT).hdll
+	NDLL:=./ndll/Linux/$(PROJECT).hdll
 endif
 OBJDIR=obj
 
@@ -22,11 +23,11 @@ HXCPP=$(shell haxelib path hxcpp | head -1)
 CC:=gcc -Isrc
 GTK_FLAGS:=$(shell pkg-config --libs --cflags gtk+-2.0)
 GCONF_FLAGS:=$(shell pkg-config --libs --cflags gconf-2.0)
-HL_FLAGS:=-DHX_LINUX /usr/local/lib/*.hdll -Iusr/local/include
+HL_FLAGS:=-DHX_LINUX /usr/local/lib/*.hdll -I/usr/local/include -fPIC
 # NEKO_FLAGS:=-fpic -fPIC -DHX_LINUX -DHXCPP_VISIT_ALLOCS -I$(HXCPP)/include -ldl -fvisibility=hidden -O2
 
 CFLAGS += $(GTK_FLAGS) $(GCONF_FLAGS) $(HL_FLAGS)
-LDFLAGS +=-fPIC -shared -L/usr/lib -lz -ldl -rdynamic -g3 -Xlinker --no-undefined $(GTK_FLAGS) $(GCONF_FLAGS)
+LDFLAGS +=-fPIC -shared -L/usr/lib -lz -ldl -rdynamic -g3 -Xlinker --no-undefined $(GTK_FLAGS) $(GCONF_FLAGS) -L/usr/local/lib
 
 all: $(NDLL)
 

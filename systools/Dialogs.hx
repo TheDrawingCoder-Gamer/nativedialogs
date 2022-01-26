@@ -25,6 +25,9 @@
 
 package systools;
 
+#if hl
+import systools.hl.HLSystools;
+#end
 typedef FILEFILTERS = {
 	var count: Int;
 	var descriptions: Array<String>;
@@ -32,19 +35,31 @@ typedef FILEFILTERS = {
 }
 
 class Dialogs {
-
+	#if !hl
 	static var _message_box = systools.Loader.load("systools","dialogs_message_box",3);
+	#end
 	public static function message( title : String, msg : String, isError : Bool ) {
+		#if hl
+		HLSystools.hlDialogsMessageBox(title,msg, isError);
+		#else
 		_message_box(title, msg, isError);
+		#end
 	}
-
+	#if !hl
 	static var _dialog_box = systools.Loader.load("systools","dialogs_dialog_box",3);
+	#end
 	public static function confirm( title : String, msg : String, isError : Bool ) : Bool {
+		#if hl 
+		return HLSystools.hlDialogsDialogBox(title, msg, isError);
+		#else
 		return _dialog_box(title, msg, isError);
+		#end
 	}
-
+	#if !hl
 	static var _dialog_save_file = null;
+	#end
 	public static function saveFile( title : String, msg: String, initialDir : String,mask:FILEFILTERS=null) : String {
+		#if !hl
 		if (_dialog_save_file == null)
 		{
 			try
@@ -56,15 +71,18 @@ class Dialogs {
 				var savef = systools.Loader.load("systools","dialogs_save_file",3);
 				_dialog_save_file = function(title,msg,initialDir,mask) return savef(title,msg,initialDir);
 			}
-		}
+		} 
+		#end
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var str:String = _dialog_save_file(title, msg, initialDir,mask);
+		var str:String = #if hl HLSystools.hlDialogsSaveFile(title, msg, initialDir, mask)#else _dialog_save_file(title, msg, initialDir,mask) #end;
 		Sys.setCwd(cwd);					//reset it afterwards
 		return str;
 	}
-
+	#if !hl
 	static var _dialog_open_file = null;
+	#end
 	public static function openFile( title : String, msg : String, mask : FILEFILTERS, multi:Bool=true ) : Array<String> {
+		#if !hl 
 		if (_dialog_open_file == null)
 		{
 			try {
@@ -76,15 +94,21 @@ class Dialogs {
 				_dialog_open_file = function(title,msg,mask,multi) return openf(title,msg,mask);
 			}
 		}
+		#end
 
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var arr:Array<String> = _dialog_open_file(title, msg, mask, multi);
+		var arr:Array<String> = #if hl HLSystools.hlDialogsOpenFile(title, msg, mask, multi) #else _dialog_open_file(title, msg, mask, multi) #end;
 		Sys.setCwd(cwd);					//reset it afterwards
 		return arr;
 	}
-
+	#if !hl
 	static var _dialog_folder = systools.Loader.load("systools","dialogs_folder",2);
+	#end
 	public static function folder( title : String, msg: String ) : String {
+		#if hl 
+		return HLSystools.hlDialogsFolder(title, msg);
+		#else
 		return _dialog_folder(title,msg);
+		#end
 	}
 }

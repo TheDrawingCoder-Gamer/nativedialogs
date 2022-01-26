@@ -26,6 +26,9 @@
  */
 package systools;
 
+#if hl
+import systools.hl.HLSystools;
+#end
 class Registry {
 
 	/**
@@ -43,21 +46,34 @@ class Registry {
 	 * Set a value in the registry. If it does not exist, it is created first.
 	 */
 	static public function setValue( key : Int, subKey : String, valuename : String, value : String) : Void {
+		#if hl
+		HLSystools.hlRegistrySetValue(key, subKey, valuename, value);
+		#else
 		_set_value( key, subKey, valuename, value);
+		#end
 	}
 
 	/**
 	 * Get the value of a key in registry.
 	 */
 	static public function getValue( key : Int, subKey : String, valuename : String ) : String {
+		#if hl
+		return HLSystools.hlRegistryGetValue(key, subKey, valuename);
+		#else
 		return _get_value( key, subKey, valuename);
+		#end
 	}
 
 	static public function deleteKey( key : Int, subKey : String) : Void {
+		#if hl
+		HLSystools.hlRegistryDeleteKey(key, subKey);
+		#else
 		_delete_key( key, subKey);
+		#end
 	}
-
+	#if !hl
 	static var _set_value = systools.Loader.load("systools","registry_set_value", 4);
 	static var _get_value = systools.Loader.load("systools","registry_get_value", 3);
 	static var _delete_key = systools.Loader.load("systools","registry_delete_key", 2);
+	#end
 }
