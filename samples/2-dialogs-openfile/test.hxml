@@ -1,7 +1,3 @@
 -lib systools
--neko app.n
--main Test
---next
--lib systools
--cpp app
+-hl app.hl
 -main Test

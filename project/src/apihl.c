@@ -73,6 +73,7 @@ HL_PRIM vbyte* HL_NAME(hl_dialogs_save_file)( vstring* title, vstring* msg, vstr
 			while(i) {
 				i--;
 				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions,vstring*)[i]->bytes);
+				printf(filters.descriptions[i]);
 				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions,vstring*)[i]->bytes);
 			}
 		}

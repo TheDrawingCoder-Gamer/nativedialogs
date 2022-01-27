@@ -28,10 +28,12 @@ package systools;
 #if hl
 import systools.hl.HLSystools;
 #end
+typedef CompatString = #if hl HString #else String #end;
+typedef CompatArray<T> = #if hl HArray<T> #else Array<T> #end;
 typedef FILEFILTERS = {
 	var count: Int;
-	var descriptions: Array<String>;
-	var extensions: Array<String>;
+	var descriptions: CompatArray<String>;
+	var extensions: CompatArray<String>;
 }
 
 class Dialogs {
@@ -114,7 +116,7 @@ class Dialogs {
 		#end
 
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var arr:Array<String> = #if hl [for (s in HLSystools.hlDialogsOpenFile(title, msg, mask, multi)) (s:String)] #else _dialog_open_file(title, msg, mask, multi) #end;
+		var arr:Array<String> = #if hl untyped HLSystools.hlDialogsOpenFile(title, msg, mask, multi) #else _dialog_open_file(title, msg, mask, multi) #end;
 		Sys.setCwd(cwd);					//reset it afterwards
 		return arr;
 	}
