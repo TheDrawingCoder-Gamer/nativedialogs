@@ -22,7 +22,3 @@
 void systools_misc_initialize()
 {
 }
-
-int systools_misc_get_key_state(int key) {
-	return (GetAsyncKeyState(key) & 0x8000) > 0;
-}

@@ -10,7 +10,7 @@ endif
 OBJDIR=obj
 
 SRC_PATHS:=src src/linux
-C_SRCS:=$(foreach PATH,$(SRC_PATHS), $(wildcard $(PATH)/*.c))
+C_SRCS:= $(wildcard src/linux/*.c)
 CPP_SRCS:=$(foreach PATH,$(SRC_PATHS), $(wildcard $(PATH)/*.cpp))
 C_OBJS:=${C_SRCS:.c=.o}
 CPP_OBJS:=${CPP_SRCS:.cpp=.o}

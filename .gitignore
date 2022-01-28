@@ -4,6 +4,7 @@ obj
 bin
 *.log
 *.hl
+dump
 # OSX objects
 all_objs
 .DS_Store

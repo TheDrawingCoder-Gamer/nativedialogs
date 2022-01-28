@@ -1,4 +1,5 @@
 package systools;
+#if (cpp || neko)
 #if cpp
 import cpp.Lib;
 #elseif neko
@@ -35,3 +36,4 @@ class Loader
 	}
 #end
 }
+#end

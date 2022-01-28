@@ -28,8 +28,10 @@ package systools;
 #if hl
 import systools.hl.HLSystools;
 #end
+using Lambda;
 typedef CompatString = #if hl HString #else String #end;
 typedef CompatArray<T> = #if hl HArray<T> #else Array<T> #end;
+typedef ArrayString = #if hl HArrayString #else Array<String>#end;
 typedef FILEFILTERS = {
 	var count: Int;
 	var descriptions: CompatArray<String>;
@@ -38,39 +40,38 @@ typedef FILEFILTERS = {
 
 class Dialogs {
 	#if hl
-	static var initialized = false;
+	static var initalized = HLSystools.init();
 	#end
-	#if !hl
+	#if (cpp || neko)
 	static var _message_box = systools.Loader.load("systools","dialogs_message_box",3);
 	#end
 	public static function message( title : String, msg : String, isError : Bool ) {
 		#if hl
-		if (!initialized) {
-			HLSystools.hlInit();
-		}
-		HLSystools.hlDialogsMessageBox(title,msg, isError);
-		#else
+		HLSystools.messageBox(title,msg, isError);
+		#elseif (cpp || neko)
 		_message_box(title, msg, isError);
+		#else 
+		throw "Unsupported Platform";
 		#end
 	}
-	#if !hl
+	#if (cpp || neko)
 	static var _dialog_box = systools.Loader.load("systools","dialogs_dialog_box",3);
 	#end
 	public static function confirm( title : String, msg : String, isError : Bool ) : Bool {
 		#if hl 
-		if (!initialized) {
-			HLSystools.hlInit();
-		}
-		return HLSystools.hlDialogsDialogBox(title, msg, isError);
-		#else
+		return HLSystools.dialogBox(title, msg, isError);
+		#elseif (cpp || neko)
 		return _dialog_box(title, msg, isError);
+		#else 
+		throw "Unsupported Platform";
+		return false;
 		#end
 	}
-	#if !hl
+	#if (cpp || neko)
 	static var _dialog_save_file = null;
 	#end
 	public static function saveFile( title : String, msg: String, initialDir : String,mask:FILEFILTERS=null) : String {
-		#if !hl
+		#if (cpp || neko)
 		if (_dialog_save_file == null)
 		{
 			try
@@ -83,21 +84,20 @@ class Dialogs {
 				_dialog_save_file = function(title,msg,initialDir,mask) return savef(title,msg,initialDir);
 			}
 		} 
-		#else 
-		if (!initialized) {
-			HLSystools.hlInit();
-		}
+		#elseif !hl
+		throw "Unsupported Platform";
+		return null;
 		#end
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var str:String = #if hl HLSystools.hlDialogsSaveFile(title, msg, initialDir, mask)#else _dialog_save_file(title, msg, initialDir,mask) #end;
+		var str:String = #if hl HLSystools.saveFile(title, msg, initialDir, mask)#elseif (cpp || neko) _dialog_save_file(title, msg, initialDir,mask) #else null #end;
 		Sys.setCwd(cwd);					//reset it afterwards
 		return str;
 	}
-	#if !hl
+	#if (cpp || neko)
 	static var _dialog_open_file = null;
 	#end
 	public static function openFile( title : String, msg : String, mask : FILEFILTERS, multi:Bool=true ) : Array<String> {
-		#if !hl 
+		#if (cpp || neko)
 		if (_dialog_open_file == null)
 		{
 			try {
@@ -109,28 +109,27 @@ class Dialogs {
 				_dialog_open_file = function(title,msg,mask,multi) return openf(title,msg,mask);
 			}
 		}
-		#else 
-		if (!initialized) {
-			HLSystools.hlInit();
-		}
+		#elseif !hl
+		throw "Unsupported Platform";
+		return null;
 		#end
 
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var arr:Array<String> = #if hl untyped HLSystools.hlDialogsOpenFile(title, msg, mask, multi) #else _dialog_open_file(title, msg, mask, multi) #end;
+		var arr:Array<String> = #if hl HLSystools.openFile(title, msg, mask, multi) #elseif (cpp || neko) _dialog_open_file(title, msg, mask, multi) #else null #end;
 		Sys.setCwd(cwd);					//reset it afterwards
 		return arr;
 	}
-	#if !hl
+	#if (cpp || neko)
 	static var _dialog_folder = systools.Loader.load("systools","dialogs_folder",2);
 	#end
 	public static function folder( title : String, msg: String ) : String {
 		#if hl 
-		if (!initialized) {
-			HLSystools.hlInit();
-		}
-		return HLSystools.hlDialogsFolder(title, msg);
-		#else
+		return HLSystools.openFolder(title, msg);
+		#elseif (cpp || neko)
 		return _dialog_folder(title,msg);
+		#else 
+		throw "Unsupported Platform";
+		return null;
 		#end
 	}
 }

@@ -67,14 +67,12 @@ HL_PRIM vbyte* HL_NAME(hl_dialogs_save_file)( vstring* title, vstring* msg, vstr
 
 		filters.count = count;
 		if (filters.count) {
-			long i = filters.count;
+			int i;
 			filters.descriptions = (const char**) malloc(i*sizeof(char*));
 			filters.extensions = (const char**) malloc(i*sizeof(char*));
-			while(i) {
-				i--;
-				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions,vstring*)[i]->bytes);
-				printf(filters.descriptions[i]);
-				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions,vstring*)[i]->bytes);
+			for (i=0;i<filters.count;i++) {
+				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, uchar*)[i]);
+				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, uchar*)[i]);
 			}
 		}
 	}
@@ -97,34 +95,28 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 	struct ARG_FILEFILTERS filters = {0,0,0};
 	struct RES_STRINGLIST files;
 
-	
 	if (mask) {
-		int count = hl_dyn_geti(mask,hl_hash_utf8("count"), &hlt_i32);
-		varray* descriptions = hl_dyn_getp(mask,hl_hash_utf8("descriptions"), &hlt_array);
-		varray* extensions = hl_dyn_getp(mask,hl_hash_utf8("extensions"), &hlt_array);
+		int count = (int)hl_dyn_geti(mask,hl_hash_utf8("count"), &hlt_i32);
+		varray* descriptions = (varray*)hl_dyn_getp(mask,hl_hash_utf8("descriptions"), &hlt_array);
+		varray* extensions = (varray*)hl_dyn_getp(mask,hl_hash_utf8("extensions"), &hlt_array);
 
 
 		filters.count = count;
 		if (filters.count) {
-			long i = filters.count;
+			int i;
 			filters.descriptions = (const char**) malloc(i*sizeof(char*));
 			filters.extensions = (const char**) malloc(i*sizeof(char*));
-			while(i) {
-				i--;
-				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions,vstring*)[i]->bytes);
-				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions,vstring*)[i]->bytes);
+			for (i=0;i<filters.count;i++) {
+				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, uchar*)[i]);
+				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, uchar*)[i]);
 			}
 		}
 	}
-	
+	printf("about to open");
 	systools_dialogs_open_file(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes),filters.count? &filters : NULL ,multi ,&files);
 	if (files.count) {
 		result = hl_alloc_array(&hlt_bytes, files.count);
-		while(files.count) {
-			files.count--;
-			hl_aptr(result, vbyte*)[files.count] = (vbyte*) files.strings[files.count];
-			free(files.strings[files.count]);
-		}
+		memcpy(hl_aptr(result, vbyte*), files.strings, files.count*hl_type_size(&hlt_bytes));
 		free(files.strings);
 	}
 
@@ -133,7 +125,6 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 		free(filters.descriptions);
 		free(filters.extensions);
 	}
-	
 	
 	
 	return result;
