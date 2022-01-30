@@ -11,21 +11,24 @@ endif
 OBJDIR=obj
 
 SRC_PATHS:=src src/linux
-C_SRCS:=$(foreach PATH,$(SRC_PATHS), $(wildcard $(PATH)/*.c))
-# CPP_SRCS:=$(foreach PATH,$(SRC_PATHS), $(wildcard $(PATH)/*.cpp))
+C_SRCS:=$(wildcard src/linux/*.c) apihl.c
 C_OBJS:=${C_SRCS:.c=.o}
-# CPP_OBJS:=${CPP_SRCS:.cpp=.o}
-OBJS:=$(C_OBJS) # $(CPP_OBJS)
+OBJS:=$(C_OBJS)
 
 HEADERS:=$(foreach PATH,$(SRC_PATHS), $(wildcard $(PATH)/*.h))
 HXCPP=$(shell haxelib path hxcpp | head -1)
 
+SANITY_FLAGS:=-Wall -pedantic -Werror
 CC:=gcc -Isrc
 GTK_FLAGS:=$(shell pkg-config --libs --cflags gtk+-3.0)
-HL_FLAGS:=-DHX_LINUX -I/usr/local/include  -std=c11 -fPIC
-
+HL_FLAGS:=-DHX_LINUX -I/usr/local/include  -std=c11 -fPIC $(SANITY_FLAGS)
+ifeq ($(DEBUG), 1) 
+	DEBUG_FLAGS:=-g
+else 
+	DEBUG_FLAGS:=-g3
+endif
 CFLAGS += $(GTK_FLAGS) $(GCONF_FLAGS) $(HL_FLAGS)
-LDFLAGS +=-fPIC -shared -L/usr/lib -lz -ldl -rdynamic -g3 -Xlinker --no-undefined $(GTK_FLAGS) -L/usr/local/lib -lhl
+LDFLAGS +=-fPIC -shared -L/usr/lib -lz -ldl -rdynamic $(DEBUG_FLAGS) -Xlinker --no-undefined $(GTK_FLAGS) -L/usr/local/lib -lhl
 
 all: $(NDLL)
 

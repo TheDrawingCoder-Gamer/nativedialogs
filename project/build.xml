@@ -11,27 +11,15 @@
 	<compilerflag value="$(pkg-config --libs --cflags gtk+-2.0)" if="linux"/>
 	<compilerflag value="$(pkg-config --libs --cflags gconf-2.0)" if="linux"/>
 	<file name="api.cpp" />
-	<file name="${platform_dir}clipboard.c" />
 	<file name="${platform_dir}dialogs.c" />
-	<file name="${platform_dir}fileutils.c" />
 	<file name="${platform_dir}misc.c" />
-	<file name="${platform_dir}registry.c" />
-	<file name="${platform_dir}browser.c" unless="linux" />
-	<file name="${platform_dir}display.c" unless="linux" />
-	<file name="${platform_dir}menus.c" if="windows" />
-	<file name="${platform_dir}win.c" if="windows" />
 </files>
 
 <files id="mac" dir="./src">
 	<compilerflag value="-I./src"/>
 	<file name="api.cpp" />
-	<file name="mac/browser.m" />
-	<file name="mac/clipboard.m" />
 	<file name="mac/dialogs.m" />
-	<file name="mac/display.m" />
-	<file name="mac/fileutils.m" />
 	<file name="mac/misc.m" />
-	<file name="mac/registry.m" />
 </files>
 
 <target id="systools" output="${LIBPREFIX}systools${DBG}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">

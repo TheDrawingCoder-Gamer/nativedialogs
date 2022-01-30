@@ -5,6 +5,7 @@ bin
 *.log
 *.hl
 dump
+out
 # OSX objects
 all_objs
 .DS_Store

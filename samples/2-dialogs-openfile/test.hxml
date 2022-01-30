@@ -1,3 +1,6 @@
 -lib systools
--hl app.hl
 -main Test
+--each
+-hl app.hl
+--next
+--neko app.n

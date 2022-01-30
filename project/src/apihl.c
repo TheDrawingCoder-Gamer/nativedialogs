@@ -68,8 +68,8 @@ HL_PRIM vbyte* HL_NAME(hl_dialogs_save_file)( vstring* title, vstring* msg, vstr
 		filters.count = count;
 		if (filters.count) {
 			int i;
-			filters.descriptions = (const char**) malloc(i*sizeof(char*));
-			filters.extensions = (const char**) malloc(i*sizeof(char*));
+			filters.descriptions = (const char**) malloc(count*sizeof(char*));
+			filters.extensions = (const char**) malloc(count*sizeof(char*));
 			for (i=0;i<filters.count;i++) {
 				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, uchar*)[i]);
 				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, uchar*)[i]);
@@ -104,11 +104,16 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 		filters.count = count;
 		if (filters.count) {
 			int i;
-			filters.descriptions = (const char**) malloc(i*sizeof(char*));
-			filters.extensions = (const char**) malloc(i*sizeof(char*));
+			filters.descriptions = (const char**) malloc(count*sizeof(char*));
+			filters.extensions = (const char**) malloc(count*sizeof(char*));
+			printf("%i\n", count);
 			for (i=0;i<filters.count;i++) {
-				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, uchar*)[i]);
-				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, uchar*)[i]);
+				printf("%i\n", i);
+				printf("%p\n", descriptions);
+				printf("%p\n", hl_aptr(descriptions, vstring*)[i]);
+				printf("%p\n", filters.descriptions);
+				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, vstring*)[i]->bytes);
+				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, vstring*)[i]->bytes);
 			}
 		}
 	}
@@ -133,8 +138,6 @@ DEFINE_PRIM(_ARR, hl_dialogs_open_file, _STRING _STRING _DYN _BOOL);//note this
 
 HL_PRIM vbyte* HL_NAME(hl_dialogs_folder)( vstring* title, vstring* msg ) {
 	char * v;
-	vbyte* result = NULL;
-	result = NULL;
 	v = systools_dialogs_folder(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes));
 	return (vbyte*) v;
 

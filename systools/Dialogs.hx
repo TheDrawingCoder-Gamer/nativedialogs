@@ -39,9 +39,6 @@ typedef FILEFILTERS = {
 }
 
 class Dialogs {
-	#if hl
-	static var initalized = HLSystools.init();
-	#end
 	#if (cpp || neko)
 	static var _message_box = systools.Loader.load("systools","dialogs_message_box",3);
 	#end

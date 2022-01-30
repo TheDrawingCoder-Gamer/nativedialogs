@@ -68,7 +68,7 @@ class CLib {
 
 }
 class HLSystools {
-    static var initialized = false;
+    static var initialized = init();
     public static function init() {
         if (initialized)
             return true;
