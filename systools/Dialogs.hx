@@ -39,94 +39,26 @@ typedef FILEFILTERS = {
 }
 
 class Dialogs {
-	#if (cpp || neko)
-	static var _message_box = systools.Loader.load("systools","dialogs_message_box",3);
-	#end
 	public static function message( title : String, msg : String, isError : Bool ) {
-		#if hl
-		HLSystools.messageBox(title,msg, isError);
-		#elseif (cpp || neko)
-		_message_box(title, msg, isError);
-		#else 
-		throw "Unsupported Platform";
-		#end
+		Systools.messageBox(title, msg, isError);
 	}
-	#if (cpp || neko)
-	static var _dialog_box = systools.Loader.load("systools","dialogs_dialog_box",3);
-	#end
 	public static function confirm( title : String, msg : String, isError : Bool ) : Bool {
-		#if hl 
-		return HLSystools.dialogBox(title, msg, isError);
-		#elseif (cpp || neko)
-		return _dialog_box(title, msg, isError);
-		#else 
-		throw "Unsupported Platform";
-		return false;
-		#end
+		return Systools.dialogBox(title, msg, isError);
 	}
-	#if (cpp || neko)
-	static var _dialog_save_file = null;
-	#end
 	public static function saveFile( title : String, msg: String, initialDir : String,mask:FILEFILTERS=null) : String {
-		#if (cpp || neko)
-		if (_dialog_save_file == null)
-		{
-			try
-			{
-				_dialog_save_file = systools.Loader.load("systools","dialogs_save_file",4);
-			}
-			catch(e:Dynamic)
-			{
-				var savef = systools.Loader.load("systools","dialogs_save_file",3);
-				_dialog_save_file = function(title,msg,initialDir,mask) return savef(title,msg,initialDir);
-			}
-		} 
-		#elseif !hl
-		throw "Unsupported Platform";
-		return null;
-		#end
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var str:String = #if hl HLSystools.saveFile(title, msg, initialDir, mask)#elseif (cpp || neko) _dialog_save_file(title, msg, initialDir,mask) #else null #end;
+		var str:String = Systools.saveFile(title, msg, initialDir, mask);
 		Sys.setCwd(cwd);					//reset it afterwards
 		return str;
 	}
-	#if (cpp || neko)
-	static var _dialog_open_file = null;
-	#end
 	public static function openFile( title : String, msg : String, mask : FILEFILTERS, multi:Bool=true ) : Array<String> {
-		#if (cpp || neko)
-		if (_dialog_open_file == null)
-		{
-			try {
-				_dialog_open_file = systools.Loader.load("systools","dialogs_open_file",4);
-			}
-			catch(e:Dynamic)
-			{
-				var openf = systools.Loader.load("systools","dialogs_open_file",3);
-				_dialog_open_file = function(title,msg,mask,multi) return openf(title,msg,mask);
-			}
-		}
-		#elseif !hl
-		throw "Unsupported Platform";
-		return null;
-		#end
 
 		var cwd:String = Sys.getCwd();		//grab current working directory before it changes
-		var arr:Array<String> = #if hl HLSystools.openFile(title, msg, mask, multi) #elseif (cpp || neko) _dialog_open_file(title, msg, mask, multi) #else null #end;
+		var arr:Array<String> = Systools.openFile(title, msg, mask, multi);
 		Sys.setCwd(cwd);					//reset it afterwards
 		return arr;
 	}
-	#if (cpp || neko)
-	static var _dialog_folder = systools.Loader.load("systools","dialogs_folder",2);
-	#end
 	public static function folder( title : String, msg: String ) : String {
-		#if hl 
-		return HLSystools.openFolder(title, msg);
-		#elseif (cpp || neko)
-		return _dialog_folder(title,msg);
-		#else 
-		throw "Unsupported Platform";
-		return null;
-		#end
+		return Systools.openFolder(title, msg);
 	}
 }

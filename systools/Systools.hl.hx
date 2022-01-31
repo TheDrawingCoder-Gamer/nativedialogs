@@ -1,4 +1,4 @@
-package systools.hl;
+package systools;
 
 #if hl
 import systools.Dialogs.FILEFILTERS;
@@ -67,9 +67,9 @@ class CLib {
     
 
 }
-class HLSystools {
+class Systools {
     static var initialized = init();
-    public static function init() {
+    private static function init() {
         if (initialized)
             return true;
         initialized = true;
@@ -102,7 +102,7 @@ class HLSystools {
             return null;
         return thingie.toArray();
     }
-    public static function openFolder(title:String, msg:String):HString { 
+    public static function openFolder(title:String, msg:String):String { 
         if (!initialized) 
             init();
         return cast CLib.hlDialogsFolder(title, msg);

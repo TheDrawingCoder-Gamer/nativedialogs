@@ -18,7 +18,9 @@
 
 #ifndef _SYSTOOLS_API_H
 #define _SYSTOOLS_API_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 // result types:
 struct RES_STRINGLIST {
 	long count;
@@ -31,5 +33,7 @@ struct ARG_FILEFILTERS {
 	const char **descriptions;
 	const char **extensions;
 };
-
+#ifdef __cplusplus 
+}
+#endif
 #endif // _SYSTOOLS_API_H
