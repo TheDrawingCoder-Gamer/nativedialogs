@@ -40,7 +40,7 @@ typedef FILEFILTERS = {
 
 class Dialogs {
 	#if (cpp || neko)
-	static var _message_box = systools.Loader.load("systools","dialogs_message_box",3);
+	static var _message_box = systools.Loader.load("nativedialogs","dialogs_message_box",3);
 	#end
 	public static function message( title : String, msg : String, isError : Bool ) {
 		#if hl
@@ -52,7 +52,7 @@ class Dialogs {
 		#end
 	}
 	#if (cpp || neko)
-	static var _dialog_box = systools.Loader.load("systools","dialogs_dialog_box",3);
+	static var _dialog_box = systools.Loader.load("nativedialogs","dialogs_dialog_box",3);
 	#end
 	public static function confirm( title : String, msg : String, isError : Bool ) : Bool {
 		#if hl 
@@ -73,11 +73,11 @@ class Dialogs {
 		{
 			try
 			{
-				_dialog_save_file = systools.Loader.load("systools","dialogs_save_file",4);
+				_dialog_save_file = systools.Loader.load("nativedialogs","dialogs_save_file",4);
 			}
 			catch(e:Dynamic)
 			{
-				var savef = systools.Loader.load("systools","dialogs_save_file",3);
+				var savef = systools.Loader.load("nativedialogs","dialogs_save_file",3);
 				_dialog_save_file = function(title,msg,initialDir,mask) return savef(title,msg,initialDir);
 			}
 		} 
@@ -98,11 +98,11 @@ class Dialogs {
 		if (_dialog_open_file == null)
 		{
 			try {
-				_dialog_open_file = systools.Loader.load("systools","dialogs_open_file",4);
+				_dialog_open_file = systools.Loader.load("nativedialogs","dialogs_open_file",4);
 			}
 			catch(e:Dynamic)
 			{
-				var openf = systools.Loader.load("systools","dialogs_open_file",3);
+				var openf = systools.Loader.load("nativedialogs","dialogs_open_file",3);
 				_dialog_open_file = function(title,msg,mask,multi) return openf(title,msg,mask);
 			}
 		}
@@ -117,7 +117,7 @@ class Dialogs {
 		return arr;
 	}
 	#if (cpp || neko)
-	static var _dialog_folder = systools.Loader.load("systools","dialogs_folder",2);
+	static var _dialog_folder = systools.Loader.load("nativedialogs","dialogs_folder",2);
 	#end
 	public static function folder( title : String, msg: String ) : String {
 		#if hl 

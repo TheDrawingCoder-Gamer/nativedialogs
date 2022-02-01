@@ -18,7 +18,7 @@ class Loader
 #if neko
 			loadNekoAPI();
 #end
-			Lib.load("systools","systools_init",0)();
+			Lib.load("nativedialogs","systools_init",0)();
 			init = true;
 		}
 
@@ -28,7 +28,7 @@ class Loader
 #if neko
 	public static function loadNekoAPI()
 	{
-		var i = Lib.load("systools","neko_init", 5);
+		var i = Lib.load("nativedialogs","neko_init", 5);
 		if (i != null)
 		{
 			i(function(s) return new String(s), function(len:Int) { var r = []; if (len > 0) r[len - 1] = null; return r; }, null, true, false);

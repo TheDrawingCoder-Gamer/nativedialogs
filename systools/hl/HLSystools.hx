@@ -71,7 +71,7 @@ abstract AbstFileFilters(HLFileFilters) from HLFileFilters to HLFileFilters {
     }
 }
 abstract ExtDynamic<T>(Dynamic) from T to T {}
-@:hlNative("systools")
+@:hlNative("nativedialogs")
 class CLib {
     public static function hlInit():Void {}
     public static function hlDialogsMessageBox(title:String, msg:String, error:Bool):Void {}

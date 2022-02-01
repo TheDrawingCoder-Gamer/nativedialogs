@@ -1,5 +1,5 @@
 
-PROJECT:=systools
+PROJECT:=nativedialogs
 
 LBITS := $(shell getconf LONG_BIT)
 ifeq ($(LBITS),64)

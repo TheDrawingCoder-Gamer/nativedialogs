@@ -1,4 +1,4 @@
--lib systools
+-lib nativedialogs
 -main Test
 --each
 -hl app.hl

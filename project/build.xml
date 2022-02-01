@@ -8,8 +8,7 @@
 
 <files id="systools" dir="./src">
 	<compilerflag value="-I./src"/>
-	<compilerflag value="$(pkg-config --libs --cflags gtk+-2.0)" if="linux"/>
-	<compilerflag value="$(pkg-config --libs --cflags gconf-2.0)" if="linux"/>
+	<compilerflag value="$(pkg-config --libs --cflags gtk+-3.0)" if="linux"/>
 	<file name="api.cpp" />
 	<file name="${platform_dir}dialogs.c" />
 	<file name="${platform_dir}misc.c" />
@@ -22,7 +21,7 @@
 	<file name="mac/misc.m" />
 </files>
 
-<target id="systools" output="${LIBPREFIX}systools${DBG}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">
+<target id="systools" output="${LIBPREFIX}nativedialogs${DBG}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">
   <ext value=".ndll" unless="mobile"/>
   <files id="systools" unless="macos"/>
   <files id="mac" if="macos"/>
@@ -32,8 +31,7 @@
   <lib name="comdlg32.lib" if="windows"/>
   <lib name="advapi32.lib" if="windows"/>
   <lib name="shell32.lib" if="windows"/>
-  <lib name="-lgtk+2" if="linux"/>
-  <lib name="-lgconf-2.0" if="linux"/>
+  <lib name="-lgtk+3" if="linux"/>
   <vflag name="-framework" value="IOKit" if="macos"/>
   <vflag name="-framework" value="Foundation" if="macos"/>
   <vflag name="-framework" value="Carbon" if="macos"/>

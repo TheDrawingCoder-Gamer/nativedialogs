@@ -1,3 +1,3 @@
 <xml>
-	<ndll name="systools" />
+	<ndll name="nativedialogs" unless="hl"/>
 </xml>

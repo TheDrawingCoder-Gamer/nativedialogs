@@ -16,7 +16,7 @@
 /*																			*/
 /* ************************************************************************ */
 
-#define HL_NAME(n) systools_##n
+#define HL_NAME(n) nativedialogs_##n
 
 #include <stdbool.h>
 #include <hl.h>
@@ -28,7 +28,7 @@
 #include "misc.h"
 #include "dialogs.h"
 
-typedef struct _filefilters systools_filefilters;
+typedef struct _filefilters nativedialogs_filefilters;
 struct _filefilters {
 	int count;
 	varray* descriptions;
