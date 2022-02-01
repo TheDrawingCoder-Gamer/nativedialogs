@@ -156,6 +156,9 @@ void systools_dialogs_open_file( const char *title, const char *msg, struct ARG_
 	opt.clientName = CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
 	opt.message = CFStringCreateWithCString(NULL,msg,kCFStringEncodingUTF8);
 	opt.modality = kWindowModalityAppModal;
+	if (multi) {
+		opt.optionFlags |= kNavAllowMultipleFiles;
+	}
 
 	if (NavCreateGetFileDialog(&opt,NULL,NULL,NULL,filterProc,filters,&ref) == noErr) {
 
@@ -194,7 +197,10 @@ void systools_dialogs_open_file( const char *title, const char *msg, struct ARG_
 	NSOpenPanel *openPanel = [[NSOpenPanel alloc] init];
 	[openPanel setTitle:[NSString stringWithUTF8String:title]];
 	[openPanel setMessage:[NSString stringWithUTF8String:msg]];
-
+	if (multi) {
+		[openPanel setCanChooseMultiple:YES];
+	}
+	
 	if (filters)
 	{
 		NSMutableArray *nsFilters = [[NSMutableArray alloc] init];

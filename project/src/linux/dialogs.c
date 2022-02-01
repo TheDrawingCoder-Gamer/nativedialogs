@@ -100,7 +100,7 @@ void systools_dialogs_open_file( const char *title, const char *msg, struct ARG_
 					  "_Cancel", GTK_RESPONSE_CANCEL,
 					  "_Open", GTK_RESPONSE_ACCEPT,
 					  NULL);
-	gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER (dialog), TRUE );
+	gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER (dialog), multi );
 	gtk_file_chooser_set_filter( GTK_FILE_CHOOSER (dialog), filter );
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
