@@ -40,7 +40,7 @@ HL_PRIM void HL_NAME(hl_init)()
 {
 	systools_misc_initialize();
 }
-DEFINE_PRIM(_VOID, hl_init, _NO_ARG);
+DEFINE_PRIM(_VOID, hl_init, _NO_ARG)
 
 // ---------------- Dialog methods -------------------------------------------
 
@@ -48,13 +48,13 @@ DEFINE_PRIM(_VOID, hl_init, _NO_ARG);
 HL_PRIM void HL_NAME(hl_dialogs_message_box)( vstring* title, vstring* msg, bool error ) {
 	systools_dialogs_message_box(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes), error);
 }
-DEFINE_PRIM(_VOID, hl_dialogs_message_box, _STRING _STRING _BOOL);
+DEFINE_PRIM(_VOID, hl_dialogs_message_box, _STRING _STRING _BOOL)
 
 
 HL_PRIM bool HL_NAME(hl_dialogs_dialog_box)( vstring* title, vstring* msg, bool error ) {
 	return systools_dialogs_dialog_box(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes),error) != 0;
 }
-DEFINE_PRIM(_BOOL, hl_dialogs_dialog_box, _STRING _STRING _BOOL);
+DEFINE_PRIM(_BOOL, hl_dialogs_dialog_box, _STRING _STRING _BOOL)
 
 HL_PRIM vbyte* HL_NAME(hl_dialogs_save_file)( vstring* title, vstring* msg, vstring* initialdir, vdynamic* mask) {
 	char * v;
@@ -71,8 +71,8 @@ HL_PRIM vbyte* HL_NAME(hl_dialogs_save_file)( vstring* title, vstring* msg, vstr
 			filters.descriptions = (const char**) malloc(count*sizeof(char*));
 			filters.extensions = (const char**) malloc(count*sizeof(char*));
 			for (i=0;i<filters.count;i++) {
-				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, uchar*)[i]);
-				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, uchar*)[i]);
+				filters.descriptions[i] = hl_to_utf8((uchar*) hl_aptr(descriptions, vbyte*)[i]);
+				filters.extensions[i] = hl_to_utf8((uchar*) hl_aptr(extensions, vbyte*)[i]);
 			}
 		}
 	}
@@ -88,7 +88,7 @@ HL_PRIM vbyte* HL_NAME(hl_dialogs_save_file)( vstring* title, vstring* msg, vstr
 	return (vbyte*) v;
 
 }
-DEFINE_PRIM(_BYTES, hl_dialogs_save_file, _STRING _STRING _STRING _DYN);
+DEFINE_PRIM(_BYTES, hl_dialogs_save_file, _STRING _STRING _STRING _DYN)
 
 HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdynamic* mask,bool multi) {
 	varray* result = NULL;
@@ -106,18 +106,12 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 			int i;
 			filters.descriptions = (const char**) malloc(count*sizeof(char*));
 			filters.extensions = (const char**) malloc(count*sizeof(char*));
-			printf("%i\n", count);
 			for (i=0;i<filters.count;i++) {
-				printf("%i\n", i);
-				printf("%p\n", descriptions);
-				printf("%p\n", hl_aptr(descriptions, vstring*)[i]);
-				printf("%p\n", filters.descriptions);
-				filters.descriptions[i] = hl_to_utf8(hl_aptr(descriptions, vstring*)[i]->bytes);
-				filters.extensions[i] = hl_to_utf8(hl_aptr(extensions, vstring*)[i]->bytes);
+				filters.descriptions[i] = hl_to_utf8((uchar*) hl_aptr(descriptions, vbyte*)[i]);
+				filters.extensions[i] = hl_to_utf8((uchar*) hl_aptr(extensions, vbyte*)[i]);
 			}
 		}
 	}
-	printf("about to open");
 	systools_dialogs_open_file(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes),filters.count? &filters : NULL ,multi ,&files);
 	if (files.count) {
 		result = hl_alloc_array(&hlt_bytes, files.count);
@@ -134,7 +128,7 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 	
 	return result;
 }
-DEFINE_PRIM(_ARR, hl_dialogs_open_file, _STRING _STRING _DYN _BOOL);//note this
+DEFINE_PRIM(_ARR, hl_dialogs_open_file, _STRING _STRING _DYN _BOOL)//note this
 
 HL_PRIM vbyte* HL_NAME(hl_dialogs_folder)( vstring* title, vstring* msg ) {
 	char * v;
@@ -142,5 +136,5 @@ HL_PRIM vbyte* HL_NAME(hl_dialogs_folder)( vstring* title, vstring* msg ) {
 	return (vbyte*) v;
 
 }
-DEFINE_PRIM(_BYTES, hl_dialogs_folder, _STRING _STRING);
+DEFINE_PRIM(_BYTES, hl_dialogs_folder, _STRING _STRING)
 

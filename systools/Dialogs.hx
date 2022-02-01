@@ -34,8 +34,8 @@ typedef CompatArray<T> = #if hl HArray<T> #else Array<T> #end;
 typedef ArrayString = #if hl HArrayString #else Array<String>#end;
 typedef FILEFILTERS = {
 	var count: Int;
-	var descriptions: CompatArray<String>;
-	var extensions: CompatArray<String>;
+	var descriptions: Array<String>;
+	var extensions: Array<String>;
 }
 
 class Dialogs {

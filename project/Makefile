@@ -11,7 +11,7 @@ OBJDIR=obj
 
 SRC_PATHS:=src src/linux
 C_SRCS:= $(wildcard src/linux/*.c)
-CPP_SRCS:=api.cpp
+CPP_SRCS:=src/api.cpp
 C_OBJS:=${C_SRCS:.c=.o}
 CPP_OBJS:=${CPP_SRCS:.cpp=.o}
 OBJS:=$(C_OBJS) $(CPP_OBJS)
@@ -25,7 +25,8 @@ ifeq ($(DEBUG), 1)
 else 
 	DEBUG_FLAGS:=-g3
 endif
-SANITY_FLAGS:=-Wall -pedantic -Werror
+# apparently haxe CFFI is insane 
+SANITY_FLAGS:=-Wall -pedantic
 CC:=g++ -Isrc
 GTK_FLAGS:=$(shell pkg-config --libs --cflags gtk+-3.0)
 NEKO_FLAGS:=-fpic -fPIC -DHX_LINUX -DHXCPP_VISIT_ALLOCS -I$(HXCPP)/include -ldl -fvisibility=hidden -O2 $(SANITY_FLAGS)

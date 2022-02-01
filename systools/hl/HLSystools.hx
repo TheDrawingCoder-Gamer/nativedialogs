@@ -8,7 +8,7 @@ import hl.BytesAccess;
 import hl.UI8;
 import Lambda;
 
-private typedef FileFiltersHandler = hl.Abstract<"systools_filefilters">;
+
 abstract HString(hl.Bytes) from hl.Bytes to hl.Bytes {
     @:to 
     public function toString():String {
@@ -28,14 +28,13 @@ abstract HArray<T>(hl.NativeArray<T>) from hl.NativeArray<T> to hl.NativeArray<T
         return cast (untyped arr.array : hl.NativeArray<T>);
     }
     public function iterator() {
-        trace(":)");
         return new hl.types.ArrayObj.ArrayObjIterator<T>(hl.types.ArrayObj.alloc(this));
     }
 }
 @:forward 
 abstract HArrayString(hl.NativeArray<hl.Bytes>) from hl.NativeArray<hl.Bytes> to hl.NativeArray<hl.Bytes> {
     @:from 
-    static function fromArray(arr:Array<String>):HArrayString {
+    public static function fromArray(arr:Array<String>):HArrayString {
         var goodArr = [for (i in arr) @:privateAccess i.toUtf8()];
         return cast (untyped goodArr.array : hl.NativeArray<hl.Bytes>);
     }
@@ -43,9 +42,7 @@ abstract HArrayString(hl.NativeArray<hl.Bytes>) from hl.NativeArray<hl.Bytes> to
     public function toArray():Array<String> {  
         
         var goodArr:Array<String> = [];
-        trace("why");
         for (i in new hl.NativeArrayIterator(this)) {
-            trace("A");
             var bytes:hl.Bytes = i ;
             goodArr.push(@:privateAccess String.fromUTF8(bytes));
         }
@@ -54,14 +51,33 @@ abstract HArrayString(hl.NativeArray<hl.Bytes>) from hl.NativeArray<hl.Bytes> to
     }
 }
 
+typedef HLFileFilters = {
+    var count:Int;
+    var descriptions:NativeArray<hl.Bytes>;
+    var extensions:NativeArray<hl.Bytes>;
+};
+abstract AbstFileFilters(HLFileFilters) from HLFileFilters to HLFileFilters {
+    @:from 
+    public static function fromFILEFILTERS(filters:FILEFILTERS) {
+        var good:HLFileFilters = {count: 0, descriptions: null, extensions: null};
+        good.count = filters.count;
+        good.descriptions = new NativeArray<hl.Bytes>(filters.count);
+        good.extensions = new NativeArray<hl.Bytes>(filters.count);
+        for (i in 0...filters.count) {
+            good.descriptions[i] = @:privateAccess filters.descriptions[i].bytes;
+            good.extensions[i] = @:privateAccess filters.extensions[i].bytes;
+        }
+        return cast good;
+    }
+}
 abstract ExtDynamic<T>(Dynamic) from T to T {}
 @:hlNative("systools")
 class CLib {
     public static function hlInit():Void {}
     public static function hlDialogsMessageBox(title:String, msg:String, error:Bool):Void {}
     public static function hlDialogsDialogBox(title:String, msg:String, error:Bool):Bool { return false; }
-    public static function hlDialogsSaveFile(title:String, msg:String, initialdir:String, mask:ExtDynamic<FILEFILTERS>=null):HString {return null;}
-    public static function hlDialogsOpenFile(title:String, msg:String, mask:ExtDynamic<FILEFILTERS>, multi:Bool):HArrayString {return null;}
+    public static function hlDialogsSaveFile(title:String, msg:String, initialdir:String, mask:ExtDynamic<HLFileFilters>=null):HString {return null;}
+    public static function hlDialogsOpenFile(title:String, msg:String, mask:ExtDynamic<HLFileFilters>, multi:Bool):HArrayString {return null;}
     public static function hlDialogsFolder(title:String, msg:String):HString { return null; }
 
     
@@ -89,7 +105,7 @@ class HLSystools {
     public static function saveFile(title:String, msg:String, initialdir:String, mask:FILEFILTERS=null):String {
         if (!initialized) 
             init();
-        var thingie:HString = CLib.hlDialogsSaveFile(title, msg, initialdir, mask).toString();
+        var thingie:HString = CLib.hlDialogsSaveFile(title, msg, initialdir,  cast AbstFileFilters.fromFILEFILTERS(mask)).toString();
         if (thingie == null)
             return null;
         return thingie.toString();
@@ -97,7 +113,7 @@ class HLSystools {
     public static function openFile(title:String, msg:String, mask:Null<FILEFILTERS>, multi:Bool):Array<String> {
         if (!initialized) 
             init();
-        var thingie:HArrayString = CLib.hlDialogsOpenFile(title, msg, mask, multi);
+        var thingie:HArrayString = CLib.hlDialogsOpenFile(title, msg, cast AbstFileFilters.fromFILEFILTERS(mask), multi);
         if (thingie == null)
             return null;
         return thingie.toArray();

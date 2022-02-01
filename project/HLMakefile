@@ -11,7 +11,7 @@ endif
 OBJDIR=obj
 
 SRC_PATHS:=src src/linux
-C_SRCS:=$(wildcard src/linux/*.c) apihl.c
+C_SRCS:=$(wildcard src/linux/*.c) src/apihl.c
 C_OBJS:=${C_SRCS:.c=.o}
 OBJS:=$(C_OBJS)
 
@@ -27,7 +27,7 @@ ifeq ($(DEBUG), 1)
 else 
 	DEBUG_FLAGS:=-g3
 endif
-CFLAGS += $(GTK_FLAGS) $(GCONF_FLAGS) $(HL_FLAGS)
+CFLAGS += $(GTK_FLAGS) $(HL_FLAGS)
 LDFLAGS +=-fPIC -shared -L/usr/lib -lz -ldl -rdynamic $(DEBUG_FLAGS) -Xlinker --no-undefined $(GTK_FLAGS) -L/usr/local/lib -lhl
 
 all: $(NDLL)

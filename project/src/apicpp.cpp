@@ -53,8 +53,7 @@ static bool dialogs_dialog_box( const char* title, const char* msg, bool error )
 
 static const char *dialogs_save_file( const char *title, const char* msg, const char* initialdir, ARG_FILEFILTERS* mask) {
 	char * v;
-	const char* result = nullptr;
-	result = nullptr;
+
 	v = systools_dialogs_save_file(title,msg,initialdir,mask ? mask : nullptr);
 	return v;
 
