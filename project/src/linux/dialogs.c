@@ -78,18 +78,23 @@ void systools_dialogs_open_file( const char *title, const char *msg, struct ARG_
 	/* NOTE: GtkFileChooserDialog doesnt seem to support filetype descriptions?
 	   we put all extensions into a GtkFileFilter */
 	GtkFileFilter *filter = gtk_file_filter_new();
-	int i = filters->count;
-	int j;
-	while( i>0 ) {
-		i--;
-		j=0;
-		char **globs = g_strsplit(filters->extensions[i],";",0);
-		while( globs[j]!=NULL ) {
-			gtk_file_filter_add_pattern( filter, globs[j] );
-			j++;
+
+	if (filters) {
+		int i = filters->count;
+		int j;
+		while( i>0 ) {
+			
+			i--;
+			j=0;
+			char **globs = g_strsplit(filters->extensions[i],";",0);
+			while( globs[j]!=NULL ) {
+				gtk_file_filter_add_pattern( filter, globs[j] );
+				j++;
+			}
+			g_strfreev( globs );
 		}
-		g_strfreev( globs );
 	}
+	
 
 
 	GtkWidget *dialog;
@@ -101,7 +106,10 @@ void systools_dialogs_open_file( const char *title, const char *msg, struct ARG_
 					  "_Open", GTK_RESPONSE_ACCEPT,
 					  NULL);
 	gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER (dialog), multi );
-	gtk_file_chooser_set_filter( GTK_FILE_CHOOSER (dialog), filter );
+	if (filters) {
+		gtk_file_chooser_set_filter( GTK_FILE_CHOOSER (dialog), filter );
+	}
+	
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
 		GSList *files = gtk_file_chooser_get_filenames( GTK_FILE_CHOOSER(dialog) );

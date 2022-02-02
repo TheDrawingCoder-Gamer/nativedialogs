@@ -11,7 +11,7 @@ class Test {
 		var result = Dialogs.openFile
 			( "Select a file please!"
 			, "Please select one or more files, so we can see if this method works"
-			, filters
+			, null
 			);
 		trace(result);
 

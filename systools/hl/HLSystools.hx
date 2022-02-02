@@ -59,6 +59,8 @@ typedef HLFileFilters = {
 abstract AbstFileFilters(HLFileFilters) from HLFileFilters to HLFileFilters {
     @:from 
     public static function fromFILEFILTERS(filters:FILEFILTERS) {
+        if (filters == null)
+            return null;
         var good:HLFileFilters = {count: 0, descriptions: null, extensions: null};
         good.count = filters.count;
         good.descriptions = new NativeArray<hl.Bytes>(filters.count);

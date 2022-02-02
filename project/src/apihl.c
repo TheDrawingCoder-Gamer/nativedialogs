@@ -95,7 +95,7 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 	struct ARG_FILEFILTERS filters = {0,0,0};
 	struct RES_STRINGLIST files;
 
-	if (mask) {
+	if (mask != NULL) {
 		int count = (int)hl_dyn_geti(mask,hl_hash_utf8("count"), &hlt_i32);
 		varray* descriptions = (varray*)hl_dyn_getp(mask,hl_hash_utf8("descriptions"), &hlt_array);
 		varray* extensions = (varray*)hl_dyn_getp(mask,hl_hash_utf8("extensions"), &hlt_array);
@@ -112,15 +112,14 @@ HL_PRIM varray* HL_NAME(hl_dialogs_open_file)( vstring* title, vstring* msg, vdy
 			}
 		}
 	}
-	systools_dialogs_open_file(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes),filters.count? &filters : NULL ,multi ,&files);
+	systools_dialogs_open_file(hl_to_utf8(title->bytes),hl_to_utf8(msg->bytes),mask != NULL ? &filters : NULL ,multi ,&files);
 	if (files.count) {
 		result = hl_alloc_array(&hlt_bytes, files.count);
 		memcpy(hl_aptr(result, vbyte*), files.strings, files.count*hl_type_size(&hlt_bytes));
 		free(files.strings);
 	}
-
 	// clean up allocated mem. for filters:
-	if (mask) {
+	if (mask != NULL) {
 		free(filters.descriptions);
 		free(filters.extensions);
 	}
